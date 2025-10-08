@@ -1,0 +1,39 @@
+# fly.toml app configuration file generated for tg-bot-fets on 2025-01-28T10:30:00Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+app = "tg-fets-trading-bot"
+primary_region = "iad"
+
+[build]
+
+[env]
+  PYTHONUNBUFFERED = "1"
+  PYTHONDONTWRITEBYTECODE = "1"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/health"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512
+
+# [mounts]
+#   source = "tg_bot_data"
+#   destination = "/app/data"
+
+[processes]
+  app = "python new_bot.py"
